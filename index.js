@@ -204,8 +204,7 @@ async function launch() {
         await passcodeEngineBlock()
       }
       if (clarifyingQ === 'hangarControlRoom') {
-        turnPowerOnInHangarControlRoom()       // this room wont unlock even if the fuse is in inventory... aslo make sure the officerQuarters will unlock with key in inventory 
-
+        turnPowerOnInHangarControlRoom()   
       }
       room.moveBetweenRooms(clarifyingQ)
       room = roomsLookUp[player.location]
