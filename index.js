@@ -48,9 +48,9 @@ class Room {
 // Our Room definitions, we have six rooms total
 const hangar = new Room('hangar', 'You are now in the Hangar.\n\nYou find yourself in a dimly-lit room. The air around you is cold and stale.\nThere is a workbench nearby with tool and anti-static equipment\nThere are three doors leading out.\n\n ', ['Blueprint'], false, true)
 const engineBlock = new Room('Engine Block', 'You are now in the Engine Block.\n\nParts are laying everywhere... This place is a complete mess!\nYou need to locate the ECM, it\'s got to be in here!\n\n ', ['ECM'], true, true)
-const hangarControlRoom = new Room('Hangar Control Room\n\n', 'You find yourself standing before the hangar control room door.\nDocuments and clothing are sprawled out all over the room. \nThere is a workdesk with a single key on top of it.\n\n ', ['key'], true, false)
+const hangarControlRoom = new Room('Hangar Control Room\n\n', 'You find yourself standing before the hangar control room door.\nDocuments and clothing are sprawled out all over the room. \nThere is a work desk with a single key on top of it.\n\n ', ['key'], true, false)
 const officerQuarters = new Room('Officer Quarters', 'The key worked!!\n\nYou are now in the officer quarters.\n\nAround the room, you see bunked beds, chairs, and writing tables.\nOn the wall above a writing table is a bulletin board\nfull of schedules, duty rosters ...\nand a random notepad with something scrawled upon it.\nYou should probably "read" it...\n\n ', ['notepad'], true, true)
-const messHall = new Room('Mess Hall', 'You are now in the mess hall.\n\nIt appears that the last meal listed on the menu board was Taco Suprise.\nYou are not feeling particularly hungry but thirst is gnawing at you...\nMaybe this opened crate of "energyDrink" is still good?\n\n ', ['energyDrink'], false, true)
+const messHall = new Room('Mess Hall', 'You are now in the mess hall.\n\nIt appears that the last meal listed on the menu board was Taco Surprise.\nYou are not feeling particularly hungry but thirst is gnawing at you...\nMaybe this opened crate of "energyDrink" is still good?\n\n ', ['energyDrink'], false, true)
 const generatorRoom = new Room('Generator Room', 'You are now in the generator room.\n\nAs you move through the archway into this room, you notice various consoles full of buttons and gauges, shelves with parts bins stacked up, as well as a pile of spare parts, including a fuse, laid out upon a small workbench.\n\n ', ['fuse'], false, true)
 
 
@@ -90,7 +90,6 @@ let shipRooms = {
 
 //Lookup table for allowable movement or action by the player
 let playerMovements = {
-  move: ['west', 'east', 'north', 'south'],
   drink: ['take a drink', 'drink'],
   take: ['take'],
   leave: ['leave', 'drop'],
@@ -119,7 +118,7 @@ let itemLookUp = {
   "fuse": fuse
 }
 
-//------------------------------ movement to and from rooms -------------------------------
+//--------------------------- movement to and from rooms -----------------------------
 
 // This function moves our player around
 async function moveToNewRoom(newRoom) {
@@ -203,14 +202,14 @@ async function launch() {
     console.log('\nYou touch down on the ship\'s landing pad successfully!')
   }
   //just some more details for the player about their impending doom
-  console.log('\n\nYou notice a light flickering above the dimly lit hangar, and as you continue your initial obeservations, it becomes quite apparent that the ship has lost power!\n\n!!!The ship is sinking closer to a black hole!!!\n\nYou must act quickly and search this cruiser to find the ECM your ship needs\nbefore the black hole consumes you and the cruiser!!!\n\n\nYou can change rooms by typing "move"\nYou can take an item for your inventory by typing "take".\nYou can drop an item by typing "drop".\nTo check your inventory type "check inventory"\nTo check your status type "status".\nTo read an item type "read"\n\n***DISCLAIMER*** This rollercoaster doesn\'t have any seatbelts...\n Please type user inputs exactly as they are listed or\n you might prematurely end your adventure!')
+  console.log('\n\nYou notice a light flickering above the dimly lit hangar, and as you continue your initial observations, it becomes quite apparent that the ship has lost power!\n\n!!!The ship is sinking closer to a black hole!!!\n\nYou must act quickly and search this cruiser to find the ECM your ship needs\nbefore the black hole consumes you and the cruiser!!!\n\n\nYou can change rooms by typing "move"\nYou can take an item for your inventory by typing "take".\nYou can drop an item by typing "drop".\nTo check your inventory type "check inventory"\nTo check your status type "status".\nTo read an item type "read"\n\n***DISCLAIMER*** This rollercoaster doesn\'t have any seat-belts...\n Please type user inputs exactly as they are listed or\n you might prematurely end your adventure!')
 
   //this is the part of the story where our player can interact with a blueprint but can't take it as per the story's request
   let blueprintQ = await ask('\nYou find a blueprint of the ship.\nThe blueprint says the ship\'s spare parts are in the Engine Block.\ndo you take or leave. ')
   if (blueprintQ === 'leave') {
     console.log('\n***You place the blueprint back down***')
   } else {
-    // Hope loves killing our user if they arent reading carefully :)
+    // Hope loves killing our user if they aren't reading carefully :)
     console.log('\nOh no, the poison left on the blueprint spreads throughout your body\nyou have now died\nINCONCEIVABLE! ')
     process.exit()
   }
@@ -224,12 +223,12 @@ async function launch() {
     let room = roomsLookUp[player.location];
     let question = await ask('move, drink, take, drop, check inventory, read, status\nWhat do you want to do? ')
 
-    // This action is 'movement' inbetween rooms 
+    // This action is 'movement' in between rooms 
     if (question === 'move') {
       console.log(shipRooms[player.location].canChangeTo)
       let clarifyingQ = await ask('\nWhat room do you want to go to? ')
 
-      // If you hit the EngineBlock you are invoking the passcodeEngineblock function 
+      // If you hit the EngineBlock you are invoking the passcode engineBlock function 
       if (clarifyingQ === 'engineBlock' && engineBlock.locked === true) {
         await passcodeEngineBlock()
       }
@@ -246,10 +245,12 @@ async function launch() {
     else if (question === 'take') {
       let takeQ = await ask('\nWhat would you like to take? ')
 
-      // If you succesfully attempted to take an item, this is the next respective logic
+      // If you successfully attempted to take an item, this is the next respective logic
       if (room.inv.includes(takeQ)) {
         console.log('\nYou have taken this item for your inventory.')
+        room.inv.pop(takeQ)
         player.inventory.push(takeQ)
+        
       } else {
         console.log('That specific item is not found in this room. Look elsewhere. ')
       }
@@ -259,10 +260,13 @@ async function launch() {
     else if (question === 'drop') {
       let dropQ = await ask('\nWhat would you like to drop? ')
 
-      // If you succesfully attempted to drop an item, this is the next respective logic 
+      // If you successfully attempted to drop an item, this is the next respective logic 
       if (player.inventory.includes(dropQ)) {
         console.log('\n\nYou have dropped this item. ')
-        player.inventory.pop[dropQ]
+        player.inventory.pop[dropQ];
+// This is where we left off ------------------------------------------------------
+        room.inv.push[dropQ]
+
       } else {
         console.log('\nThat specific item is not found in your inventory. ')
       }
@@ -271,7 +275,7 @@ async function launch() {
     else if (question === 'check inventory') {
       let inventoryQ = await ask('\nWould you like to check your inventory? ')
 
-      // If you succesfully attempted to 'check inventory', this is the next respective logic 
+      // If you successfully attempted to 'check inventory', this is the next respective logic 
       if (inventoryQ === 'yes') {
         console.log('The items you have in your inventory are: ' + player.inventory)
       } else {
@@ -282,7 +286,7 @@ async function launch() {
     else if (question === 'status') {
       let statusQ = await ask('\nWould you like to check your status? ')
 
-      // If you succesfully attempted to 'check status', this is the next respective logic 
+      // If you successfully attempted to 'check status', this is the next respective logic 
       if (statusQ === 'yes') {
         console.log('You are currently feeling: ' + player.status)
       } else {
@@ -293,7 +297,7 @@ async function launch() {
     // This is the 'drink' action and it's assigned 'await / ask' 
     else if (question === 'drink') {
       let drinkQ = await ask('\nWould you like to drink this? ')
-    // If you succesfully attempted to 'drink', this is the next respective logic 
+    // If you successfully attempted to 'drink', this is the next respective logic 
       if (drinkQ === 'yes' && player.inventory.includes['energyDrink']) {
         console.log(player.status)
         player['changeStatus']()
@@ -305,7 +309,7 @@ async function launch() {
     // This is the 'read' action and it's assigned 'await / ask' 
     else if (question === 'read') {
       let readQ = await ask('\nWhat item in your inventory would you like to read? ')
-      // If you succesfully attempted to 'read', this is the next respective logic 
+      // If you successfully attempted to 'read', this is the next respective logic 
       if (readQ === 'notepad') {
         console.log(notepad.desc)
       }
