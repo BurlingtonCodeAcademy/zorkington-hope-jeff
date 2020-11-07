@@ -179,7 +179,7 @@ let roomsLookUp = {
 //   fuse: fuse,
 // };
 
-//------------------------------ movement to and from rooms -------------------------------
+//--------------------------- movement to and from rooms -----------------------------
 
 // This function moves our player around
 async function moveToNewRoom(newRoom) {
@@ -331,7 +331,7 @@ async function launch() {
     else if (question === "take") {
       let takeQ = await ask("\nWhat would you like to take? ");
 
-      // If you succesfully attempted to take an item, this is the next respective logic
+      // If you successfully attempted to take an item, this is the next respective logic
       if (room.inv.includes(takeQ)) {
         console.log("\nYou have taken this item for your inventory.");
         let roomIndex = room.inv.indexOf(takeQ);
