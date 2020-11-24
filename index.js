@@ -165,6 +165,7 @@ let roomsLookUp = {
   generatorRoom: generatorRoom,
 };
 
+//This is an icebox for us to attempt after resubmission. 
 // if you want to use.... change the user input, it needs to be passed through the item look up table to reference the items that youre constructing (its currently being passed a string)
 //Lookup table for inventory items
 // let itemLookUp = {
